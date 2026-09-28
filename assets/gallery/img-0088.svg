@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450" viewBox="0 0 600 450">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2b6b52"/><stop offset="1" stop-color="#a7d7b9" stop-opacity=".65"/></linearGradient></defs>
+<rect width="600" height="450" fill="url(#g)"/><path d="M80 360 L115 160 L150 360Z" fill="#a7d7b9" opacity="0.35"/><path d="M145 360 L180 160 L215 360Z" fill="#a7d7b9" opacity="0.47"/><path d="M210 360 L245 160 L280 360Z" fill="#a7d7b9" opacity="0.59"/><path d="M275 360 L310 160 L345 360Z" fill="#a7d7b9" opacity="0.71"/><path d="M340 360 L375 160 L410 360Z" fill="#a7d7b9" opacity="0.35"/><path d="M405 360 L440 160 L475 360Z" fill="#a7d7b9" opacity="0.47"/><path d="M470 360 L505 160 L540 360Z" fill="#a7d7b9" opacity="0.59"/>
+<text x="30" y="415" fill="#fff" opacity=".75" font-family="Arial,sans-serif" font-size="18">NATURE • 088</text>
+</svg>

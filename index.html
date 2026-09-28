@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Gallery Pro — a premium image gallery and editor">
+<title>Gallery Pro — Premium Image Studio</title>
+<link rel="icon" href="apple.png">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-mark">✦</div><div><strong>Gallery Pro</strong><span>Image Studio</span></div></div>
+    <button class="new-btn" id="uploadBtn">＋ Add Images</button>
+    <nav>
+      <button class="nav-item active" data-view="all"><span>▦</span> All Images <b id="allCount">1000</b></button>
+      <button class="nav-item" data-view="favorites"><span>♡</span> Favorites <b id="favCount">0</b></button>
+      <button class="nav-item" data-view="recent"><span>◷</span> Recently Viewed</button>
+      <button class="nav-item" data-view="horror"><span>☠</span> Horror & Ghosts</button>
+      <button class="nav-item" data-view="collage"><span>▧</span> Collage Maker</button>
+      <button class="nav-item" data-view="3dstudio"><span>◇</span> 3D Studio <b>PRO</b></button>
+      <button class="nav-item" id="advancedBtn"><span>⚙</span> Advanced Lab <b>PRO</b></button>
+    </nav>
+    <div class="side-section"><label>COLLECTIONS</label>
+      <button class="nav-item" data-cat="Nature">🌿 Nature</button>
+      <button class="nav-item" data-cat="Travel">✈ Travel</button>
+      <button class="nav-item" data-cat="Urban">🏙 Urban</button>
+      <button class="nav-item" data-cat="Abstract">✧ Abstract</button>
+      <button class="nav-item" data-cat="Horror">👻 Horror</button>
+      <button class="nav-item" data-cat="Space">◉ Space</button>
+      <button class="nav-item" data-cat="3D Creations">🧊 3D Creations</button>
+      <button class="nav-item" data-cat="Lord Ganesha">🪷 Lord Ganesha</button>
+      <button class="nav-item" data-cat="Radha Krishna">💜 Radha Krishna</button>
+      <button class="nav-item" data-cat="Vitthal Rukmini">🙏 Vitthal Rukmini</button>
+      <button class="nav-item" data-cat="Cute Animals">🐾 Cats & Dogs</button>
+      <button class="nav-item" data-cat="Shinchan Style">🎨 Shinchan Style</button>
+      <button class="nav-item" data-cat="Doraemon Style">🤖 Doraemon Style</button>
+      <button class="nav-item" data-cat="Pokemon Inspired">⚡ Pocket Creatures</button>
+      <button class="nav-item" data-cat="Ben 10 Style">🟢 Alien Heroes</button>
+    </div>
+    <div class="premium-card"><div class="crown">♛</div><strong>Premium Studio</strong><p>Unlimited editing, frames, filters & collages.</p><button id="premiumBtn">Explore Premium</button></div>
+    <div class="sidebar-bottom"><button class="icon-btn" id="themeBtn" title="Toggle theme">◐</button><span>Gallery Pro v2.0</span></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="mobile-menu" id="menuBtn">☰</button>
+      <div class="search"><span>⌕</span><input id="search" placeholder="Search 1,200 images, 3D, cartoons, devotion, animals..."><kbd>Ctrl K</kbd></div>
+      <div class="top-actions"><button class="icon-btn" id="selectBtn">✓ Select</button><button class="avatar">SP</button></div>
+    </header>
+    <section class="hero">
+      <div><p class="eyebrow">PREMIUM IMAGE LIBRARY</p><h1 id="viewTitle">My Gallery</h1><p id="viewSub">1,200 curated visuals • themed collections • local & private</p></div>
+      <div class="hero-actions"><button class="outline" id="sortBtn">↕ Sort: Featured</button><button class="primary" id="shuffleBtn">✦ Surprise Me</button></div>
+    </section>
+    <div class="toolbar">
+      <div class="chips" id="chips"><button class="chip active" data-filter="all">All</button><button class="chip" data-filter="Horror">Horror</button><button class="chip" data-filter="ghost">Ghosts</button><button class="chip" data-filter="Nature">Nature</button><button class="chip" data-filter="Travel">Travel</button><button class="chip" data-filter="Urban">Urban</button><button class="chip" data-filter="3D Creations">3D</button><button class="chip" data-filter="Lord Ganesha">Ganesha</button><button class="chip" data-filter="Radha Krishna">Radha Krishna</button><button class="chip" data-filter="Vitthal Rukmini">Vitthal</button><button class="chip" data-filter="Cute Animals">Cats & Dogs</button><button class="chip" data-filter="Pokemon Inspired">Pocket Creatures</button></div>
+      <span id="resultCount"></span>
+    </div>
+    <section class="gallery" id="gallery"></section>
+    <div class="pagination" id="pagination"></div>
+  </main>
+</div>
+
+<div class="modal" id="viewer">
+ <div class="viewer-card">
+   <button class="close" data-close="viewer">×</button>
+   <div class="viewer-image-wrap"><img id="viewerImg"><button class="round prev" id="prevImg">‹</button><button class="round next" id="nextImg">›</button></div>
+   <div class="viewer-info"><div><span class="tag" id="viewerTag"></span><h2 id="viewerTitle"></h2><p id="viewerMeta"></p></div><div class="viewer-buttons"><button class="outline" id="editBtn">✎ Edit</button><button class="outline" id="favViewer">♡</button><button class="primary" id="downloadBtn">↓ Download</button></div></div>
+ </div>
+</div>
+
+<div class="modal" id="editor">
+ <div class="editor-card">
+   <div class="editor-head"><div><span class="eyebrow">PREMIUM STUDIO</span><h2>Image Editor</h2></div><button class="close" data-close="editor">×</button></div>
+   <div class="editor-layout">
+    <div class="canvas-area"><div class="canvas-bg" id="canvasBg"><img id="editImg"></div><div class="crop-overlay" id="cropOverlay"><i></i><i></i><i></i><i></i></div></div>
+    <div class="editor-tools">
+      <div class="tool-tabs"><button class="tool-tab active" data-tool="adjust">Adjust</button><button class="tool-tab" data-tool="filters">Filters</button><button class="tool-tab" data-tool="crop">Crop</button><button class="tool-tab" data-tool="frame">Frame</button><button class="tool-tab" data-tool="background">BG</button></div>
+      <div class="tool-panel active" id="adjust">
+       <label>Brightness <output id="brightnessOut">100%</output><input type="range" id="brightness" min="50" max="150" value="100"></label>
+       <label>Contrast <output id="contrastOut">100%</output><input type="range" id="contrast" min="50" max="180" value="100"></label>
+       <label>Saturation <output id="saturationOut">100%</output><input type="range" id="saturation" min="0" max="200" value="100"></label>
+       <label>Blur <output id="blurOut">0px</output><input type="range" id="blur" min="0" max="10" value="0"></label>
+       <div class="mini-actions"><button id="rotateLeft">↶ Rotate</button><button id="rotateRight">Rotate ↷</button><button id="flip">⇋ Flip</button></div>
+      </div>
+      <div class="tool-panel" id="filters"><div class="filter-grid">
+       <button data-filter-edit="none">Original</button><button data-filter-edit="grayscale(1)">Mono</button><button data-filter-edit="sepia(.8)">Vintage</button><button data-filter-edit="contrast(1.3) saturate(1.4)">Pop</button><button data-filter-edit="hue-rotate(70deg)">Dream</button><button data-filter-edit="invert(.9) hue-rotate(150deg)">Ghost</button><button data-filter-edit="brightness(.65) contrast(1.3)">Noir</button><button data-filter-edit="sepia(.5) hue-rotate(290deg)">Mystic</button>
+      </div></div>
+      <div class="tool-panel" id="crop"><p class="hint">Crop preview • choose a ratio</p><div class="ratio-grid"><button data-ratio="free">Free</button><button data-ratio="1/1">Square</button><button data-ratio="4/5">Portrait</button><button data-ratio="16/9">Landscape</button></div><button class="primary full" id="applyCrop">✓ Apply Crop</button></div>
+      <div class="tool-panel" id="frame"><div class="frame-grid"><button data-frame="none">None</button><button data-frame="solid">Classic</button><button data-frame="double">Double</button><button data-frame="neon">Neon</button><button data-frame="film">Film</button><button data-frame="polaroid">Polaroid</button></div></div>
+      <div class="tool-panel" id="background"><div class="bg-grid"><button data-bg="transparent">Transparent</button><button data-bg="#ffffff">Snow</button><button data-bg="#111827">Midnight</button><button data-bg="#6d28d9">Royal</button><button data-bg="#064e3b">Forest</button><button data-bg="#7f1d1d">Crimson</button></div></div>
+      <div class="editor-foot"><button class="outline" id="resetEdit">Reset</button><button class="primary" id="saveEdit">Save & Download</button></div>
+    </div>
+   </div>
+ </div>
+</div>
+
+<div class="modal" id="collageModal">
+ <div class="collage-card"><button class="close" data-close="collageModal">×</button><span class="eyebrow">PREMIUM FEATURE</span><h2>Collage Maker</h2><p class="muted">Select up to 6 images from your library.</p><div class="collage-layouts"><button data-layout="grid">▦ Grid</button><button data-layout="masonry">▤ Masonry</button><button data-layout="strip">▥ Strip</button></div><div class="collage-preview" id="collagePreview"><span>Select images in the gallery, then open Collage Maker.</span></div><button class="primary full" id="downloadCollage">↓ Export Collage</button></div>
+</div>
+
+<div class="modal" id="studio3d">
+ <div class="studio3d-card">
+  <div class="editor-head"><div><span class="eyebrow">PREMIUM 3D STUDIO</span><h2>3D Image Creator</h2></div><button class="close" data-close="studio3d">×</button></div>
+  <div class="studio3d-layout">
+   <div class="studio3d-stage" id="studio3dStage"><div class="three-d-object" id="threeDObject"><span id="threeDText">GALLERY 3D</span></div></div>
+   <div class="studio3d-controls">
+    <label>Text <input id="threeDTextInput" value="GALLERY 3D" maxlength="24"></label>
+    <label>Depth <output id="depthOut">35</output><input id="depth" type="range" min="0" max="80" value="35"></label>
+    <label>Rotate X <output id="rxOut">-8°</output><input id="rx" type="range" min="-35" max="35" value="-8"></label>
+    <label>Rotate Y <output id="ryOut">-20°</output><input id="ry" type="range" min="-55" max="55" value="-20"></label>
+    <label>Rotate Z <output id="rzOut">0°</output><input id="rz" type="range" min="-25" max="25" value="0"></label>
+    <label>Glow <output id="glowOut">30</output><input id="glow" type="range" min="0" max="70" value="30"></label>
+    <div class="three-d-colors"><button data-3d-bg="#101329">Midnight</button><button data-3d-bg="#32105c">Royal</button><button data-3d-bg="#064e3b">Forest</button><button data-3d-bg="#7f1d1d">Crimson</button></div>
+    <div class="three-d-colors"><button data-3d-color="#8b5cf6">Violet</button><button data-3d-color="#22d3ee">Cyan</button><button data-3d-color="#f59e0b">Gold</button><button data-3d-color="#fb7185">Rose</button></div>
+    <button class="primary full" id="export3d">↓ Export 3D PNG</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div class="modal" id="advancedLab">
+ <div class="advanced-card">
+  <div class="editor-head"><div><span class="eyebrow">COMMERCIAL TOOLKIT</span><h2>Advanced Lab</h2></div><button class="close" data-close="advancedLab">×</button></div>
+  <div class="advanced-tabs">
+   <button class="adv-tab active" data-adv="ai">AI & Background</button><button class="adv-tab" data-adv="markup">Draw & Annotate</button><button class="adv-tab" data-adv="watermark">Watermark</button><button class="adv-tab" data-adv="effects">Advanced Effects</button><button class="adv-tab" data-adv="batch">Batch & Convert</button><button class="adv-tab" data-adv="media">GIF & Video</button><button class="adv-tab" data-adv="poster">Meme & Poster</button><button class="adv-tab" data-adv="organize">Albums & Share</button><button class="adv-tab" data-adv="3d">3D / AR</button>
+  </div>
+  <section class="adv-panel active" id="adv-ai"><h3>AI Background Removal</h3><p>Runs in the browser using an AI model loaded on demand. Pick an image and remove its background.</p><input type="file" id="aiFile" accept="image/*"><div class="adv-row"><button class="primary" id="removeBgBtn">✦ Remove Background</button><button class="outline" id="replaceBgBtn">Replace with Color</button><input type="color" id="aiBgColor" value="#ffffff"></div><div class="ai-preview"><img id="aiPreview"></div><small>First use may download the model from the public CDN.</small></section>
+  <section class="adv-panel" id="adv-markup"><h3>Canvas Drawing & Redaction</h3><div class="adv-row"><input type="file" id="markupFile" accept="image/*"><input type="color" id="drawColor" value="#ff3b30"><input type="range" id="drawSize" min="2" max="40" value="8"><button id="drawMode">Brush</button><button id="redactMode">Pixelate</button><button id="clearDrawing">Clear</button><button class="primary" id="exportMarkup">Export PNG</button></div><div class="markup-wrap"><img id="markupImage"><canvas id="markupCanvas"></canvas></div></section>
+  <section class="adv-panel" id="adv-watermark"><h3>Smart Watermark</h3><div class="adv-grid"><input id="wmText" placeholder="© Your Brand" value="Gallery Pro"><input id="wmOpacity" type="range" min="5" max="100" value="55"><input id="wmSize" type="range" min="12" max="120" value="42"><select id="wmPosition"><option>bottom-right</option><option>bottom-left</option><option>center</option><option>top-right</option><option>tile</option></select><input type="file" id="wmImage" accept="image/*"><button class="primary" id="watermarkExport">Export Watermarked Image</button></div><p class="hint">Text or image watermark • opacity • size • placement • tiled pattern.</p></section>
+  <section class="adv-panel" id="adv-effects"><h3>Advanced Adjustments & Stickers</h3><div class="adv-grid"><input type="file" id="fxFile" accept="image/*"><label>Hue <input id="fxHue" type="range" min="-180" max="180" value="0"></label><label>HSL Saturation <input id="fxSat" type="range" min="0" max="200" value="100"></label><label>Lightness <input id="fxLight" type="range" min="50" max="150" value="100"></label><label>Sharpness <input id="fxSharp" type="range" min="0" max="10" value="2"></label><label>Vignette <input id="fxVignette" type="range" min="0" max="100" value="0"></label><label>Curves / Gamma <input id="fxGamma" type="range" min="50" max="150" value="100"></label></div><div class="sticker-row"><button data-sticker="⭐">⭐</button><button data-sticker="❤️">❤️</button><button data-sticker="😂">😂</button><button data-sticker="🔥">🔥</button><button data-sticker="👻">👻</button><button data-sticker="🐱">🐱</button><button data-sticker="🐶">🐶</button><button data-sticker="✨">✨</button></div><button class="primary" id="fxExport">Export Advanced Edit</button><div class="fx-preview"><img id="fxPreview"></div></section>
+  <section class="adv-panel" id="adv-batch"><h3>Batch Editing & Conversion</h3><input type="file" id="batchFiles" accept="image/*" multiple><div class="adv-grid"><select id="batchFormat"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select><input id="batchQuality" type="range" min="10" max="100" value="85"><select id="batchRatio"><option value="none">Original ratio</option><option value="1">Square</option><option value="0.8">Portrait 4:5</option><option value="1.7778">Landscape 16:9</option></select><input id="batchWatermark" placeholder="Batch watermark (optional)"></div><button class="primary" id="batchExport">Process & Download ZIP</button><button class="outline" id="pdfExport">Convert selected files to PDF</button><p id="batchStatus" class="hint"></p></section>
+  <section class="adv-panel" id="adv-media"><h3>Animated GIF & Short Video</h3><p class="hint">Choose images, set duration, and create a slideshow. WebM works without a server; GIF uses gif.js when available.</p><input type="file" id="mediaFiles" accept="image/*" multiple><div class="adv-row"><input id="mediaDelay" type="range" min="200" max="3000" value="900"><button class="primary" id="videoExport">Export WebM</button><button class="outline" id="gifExport">Export GIF</button></div></section>
+  <section class="adv-panel" id="adv-poster"><h3>Meme & Poster Generator</h3><div class="poster-grid"><select id="posterTemplate"><option value="meme">Classic Meme</option><option value="story">Instagram Story</option><option value="youtube">YouTube Thumbnail</option><option value="linkedin">LinkedIn Header</option><option value="quote">Quote Card</option></select><input type="file" id="posterFile" accept="image/*"><input id="posterTop" placeholder="TOP TEXT"><input id="posterBottom" placeholder="BOTTOM TEXT"><input id="posterQuote" placeholder="Quote / headline"><button class="primary" id="posterExport">Export Poster</button></div></section>
+  <section class="adv-panel" id="adv-organize"><h3>Albums, Tags & Sharing</h3><div class="adv-grid"><input id="albumName" placeholder="New album name"><button class="primary" id="createAlbum">Create Album</button><select id="albumSelect"><option value="">Select album</option></select><input id="imageTag" placeholder="Tag selected image"><input id="imageDescription" placeholder="Description"><button class="outline" id="saveMetadata">Save Metadata</button></div><div id="albumList" class="album-list"></div><div class="adv-row"><button class="primary" id="shareGallery">Create Share Data</button><button class="outline" id="embedGallery">Copy Embed Code</button></div><textarea id="shareOutput" readonly placeholder="Share JSON / embed code appears here"></textarea><div class="cloud-box"><h4>☁ Cloud Sync (connection-ready)</h4><div class="adv-grid"><select id="cloudProvider"><option value="supabase">Supabase</option><option value="firebase">Firebase</option></select><input id="cloudUrl" placeholder="Project URL / Firebase config JSON"><input id="cloudKey" placeholder="Public anon key / config"><button class="outline" id="saveCloud">Save Connection Settings</button></div><p id="cloudStatus" class="hint">Credentials are kept locally until you connect a real backend.</p></div><p class="hint">Albums and metadata use browser storage by default. A real multi-device sync requires your Supabase/Firebase project credentials and security rules.</p></section>
+  <section class="adv-panel" id="adv-3d"><h3>Three.js 3D Viewer & AR</h3><div class="adv-row"><input type="file" id="threeFile" accept="image/*"><button class="primary" id="threeStart">Open 3D Viewer</button><button class="outline" id="arBtn">AR Preview</button><button class="outline" id="parallaxBtn">Parallax Preview</button></div><div id="threeMount" class="three-mount"></div><p id="arStatus" class="hint"></p></section>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+<input type="file" id="fileInput" accept="image/*" multiple hidden>
+<script src="app.js"></script>
+</body>
+</html>

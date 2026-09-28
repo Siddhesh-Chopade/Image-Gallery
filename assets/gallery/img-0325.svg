@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450" viewBox="0 0 600 450">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1c6f8a"/><stop offset="1" stop-color="#9ce4ef" stop-opacity=".65"/></linearGradient></defs>
+<rect width="600" height="450" fill="url(#g)"/><path d="M0 300 Q150 220 300 300 T600 300 V450 H0Z" fill="#9ce4ef" opacity=".85"/><circle cx="450" cy="105" r="55" fill="#9ce4ef" opacity=".8"/><path d="M0 380 Q160 330 300 380 T600 380 V450 H0Z" fill="#fff" opacity=".18"/>
+<text x="30" y="415" fill="#fff" opacity=".75" font-family="Arial,sans-serif" font-size="18">TRAVEL • 025</text>
+</svg>
